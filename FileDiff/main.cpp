@@ -7,7 +7,7 @@
 using namespace std;
 
 
-char* testChar ="this is a test char";
+
 
 
 int main(int argc, char *argv[])
@@ -15,11 +15,15 @@ int main(int argc, char *argv[])
 
     std::string path = "/Users/shishenzhang/log1.txt";
     ifstream fa(path);
-
+    
+    ofstream of("/Users/shishenzhang/out.txt");
+    streambuf* fileBuf = of.rdbuf();
+    
+    cout.rdbuf(fileBuf);
     auto m = mainDetector(fa);
     for(auto& c:m){
         cout<<"File Name:\t"<<c.name<<endl;
-        cout<<"Diff Content:\t"<<c.name<<endl;
+        cout<<"Diff Content:\t"<<endl;
         for(auto& n:c.diffContent){
             cout<<n.first<<endl;
         }

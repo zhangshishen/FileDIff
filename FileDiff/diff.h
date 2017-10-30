@@ -24,11 +24,12 @@ struct Diff;
 template<class T> void initSeparator(std::initializer_list<T>& t);
 char* getName(char* word);
 char* getFormat(char* word);
+std::vector<Diff> mainDetector(std::ifstream &file);
 int diff(char **word,int n,std::vector<Diff>& resVec);
 std::vector<std::pair<std::string,int>> testKey(std::unordered_map<std::string,int>&key1,std::unordered_map<std::string,int>&key2);
 //int testDiff(std::string str1,std::string str2);
 
-std::vector<Diff> mainDetector(std::ifstream &file);
+
 std::string getDir(char* word);
 
 //struct which saving differ file's info

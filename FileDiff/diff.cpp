@@ -203,9 +203,14 @@ std::vector<std::pair<std::string,int>> testKey(std::unordered_map<std::string,i
     
     for(auto& c:key1){
         auto m =key2.find(c.first);
-        if(m!=key2.end()){
+        if(m==key2.end()){
             res.push_back(c);
-            res.push_back(*m);
+        }
+    }
+    for(auto& c:key2){
+        auto m =key1.find(c.first);
+        if(m==key1.end()){
+            res.push_back(c);
         }
     }
     return res;
