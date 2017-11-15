@@ -176,19 +176,23 @@ int diff(char **word,int n,std::ifstream &file,std::vector<Diff>& resVec){
 
 std::vector<Diff> mainDetector(std::ifstream &file){
     
-    char* word[10];
+    char* word[30];
     std::vector<Diff> resVec;
     while(!file.eof()){
         file.getline(buf, 102400);
         int length = readLine(word, buf);
-    
+        if(length>=10){
+            
+        }
         int sentence = sentenceFormat(word);
     
         switch(sentence){
             case DIFF:
                 diff(word,length,file,resVec);
                 break;
-        
+            case BIN:
+                
+                break;
         }
     }
     return resVec;

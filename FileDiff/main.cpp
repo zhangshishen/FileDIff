@@ -13,13 +13,14 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 
-    std::string path = "/Users/shishenzhang/log1.txt";
+    std::string path = "/Users/shishenzhang/log2.txt";
     ifstream fa(path);
     
     ofstream of("/Users/shishenzhang/out.txt");
     streambuf* fileBuf = of.rdbuf();
     
     cout.rdbuf(fileBuf);
+    
     auto m = mainDetector(fa);
     for(auto& c:m){
         cout<<"File Name:\t"<<c.name<<endl;
@@ -30,4 +31,5 @@ int main(int argc, char *argv[])
         cout<<endl;
     }
     return 0;
+    
 }

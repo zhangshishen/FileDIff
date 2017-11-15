@@ -12,6 +12,7 @@
 		187B962D1F5E8ED300D3DE22 /* keyExtract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 187B962C1F5E8ED300D3DE22 /* keyExtract.cpp */; };
 		187B962F1F5EA38500D3DE22 /* detector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 187B962E1F5EA38500D3DE22 /* detector.cpp */; };
 		189918211F1F5182002E28F3 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 189918201F1F5182002E28F3 /* main.cpp */; };
+		18D6A1AA1FBBCEA6002B4041 /* sqLiteReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18D6A1A81FBBCEA6002B4041 /* sqLiteReader.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,6 +38,8 @@
 		18C5E46D1F98512700A5B93F /* diff.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = diff.h; sourceTree = "<group>"; };
 		18C5E46E1F98514000A5B93F /* keyExtract.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = keyExtract.h; sourceTree = "<group>"; };
 		18C5E46F1F98514A00A5B93F /* detector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = detector.h; sourceTree = "<group>"; };
+		18D6A1A81FBBCEA6002B4041 /* sqLiteReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqLiteReader.cpp; sourceTree = "<group>"; };
+		18D6A1A91FBBCEA6002B4041 /* sqLiteReader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = sqLiteReader.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +81,8 @@
 				18C5E46E1F98514000A5B93F /* keyExtract.h */,
 				187B962E1F5EA38500D3DE22 /* detector.cpp */,
 				18C5E46F1F98514A00A5B93F /* detector.h */,
+				18D6A1A81FBBCEA6002B4041 /* sqLiteReader.cpp */,
+				18D6A1A91FBBCEA6002B4041 /* sqLiteReader.hpp */,
 			);
 			path = FileDiff;
 			sourceTree = "<group>";
@@ -143,6 +148,7 @@
 				187B96291F5E753100D3DE22 /* parser.cpp in Sources */,
 				189918211F1F5182002E28F3 /* main.cpp in Sources */,
 				187B962B1F5E80D800D3DE22 /* diff.cpp in Sources */,
+				18D6A1AA1FBBCEA6002B4041 /* sqLiteReader.cpp in Sources */,
 				187B962D1F5E8ED300D3DE22 /* keyExtract.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -11,7 +11,7 @@
 
 
 
-char* keyword[5]={"diff","and","binnary","file","differs"};
+char* keyword[5]={"diff","and","Binary","file","differ"};
 
 
 // first line of diff command *[,*]c[,*]
@@ -43,9 +43,9 @@ int sentenceFormat(char **word){
     if(strcmp(word[0],keyword[0])==0){
         return DIFF;
     }else if(strcmp(word[1],keyword[2])){
-        
-    }else {
-        
+        return BIN;
+    }else if(strcmp(word[4],keyword[4])){
+        //return BIN;
     }
     return 0;
 }
