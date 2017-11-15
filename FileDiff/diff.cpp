@@ -157,9 +157,11 @@ int diff(char **word,int n,std::ifstream &file,std::vector<Diff>& resVec){
     
     if(strcmp(fFormat,".json")==0||strcmp(fFormat,".JSON")==0)
     {
+        
         //JSON file differ sub-program
     }else if(strcmp(fFormat,".XML")==0||strcmp(fFormat,".xml")==0)
     {
+        //xmlfile for
         //XML file differ sub-program
     }else
     {
