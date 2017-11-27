@@ -79,7 +79,7 @@ void initSeparator(const std::initializer_list<T>& t){
     }
 }
 
-void commonDiff(std::ifstream& file,Diff& dif){
+void commonDiff(std::ifstream& file,Diff& dif,int flag){
     
     int diffLine[4];
     
@@ -112,7 +112,15 @@ void commonDiff(std::ifstream& file,Diff& dif){
             lineByte = file.tellg();
             file.getline(buf,102400);
             line = buf;
-            extractKey(line,separator,map1,lineByte);
+            if(flag==FLAT) {
+                map1[line] = 0;
+                /*
+                 
+                 TODO
+                 
+                 */
+            }
+            else extractKey(line,separator,map1,lineByte);
         
         }
         // \ No newline at end of file
@@ -133,7 +141,15 @@ void commonDiff(std::ifstream& file,Diff& dif){
             lineByte = file.tellg();
             file.getline(buf,102400);
             line = buf;
-            extractKey(line,separator,map2,lineByte);
+            if(flag==FLAT) {
+                map2[line] = 0;
+                /**
+                 
+                 TODO
+                 
+                 **/
+            }
+            else extractKey(line,separator,map2,lineByte);
         
         }
     }
@@ -163,9 +179,17 @@ int diff(char **word,int n,std::ifstream &file,std::vector<Diff>& resVec){
     {
         //xmlfile for
         //XML file differ sub-program
+    }else if(strcmp(fFormat,".sqlite")==0||strcmp(fFormat,".SQLITE")==0){
+        
+        sqlReader(dif.path1.c_str(),"file1.txt");
+        sqlReader(dif.path2.c_str(),"file2.txt");
+        paticularGenerator("file1.txt","file2.txt","diffout.txt");
+        std::ifstream diffFile("diffout.txt");
+        commonDiff(diffFile,dif,1);
+        
     }else
     {
-        commonDiff(file,dif);
+        commonDiff(file,dif,1);
     }
     
     resVec.emplace_back(dif);
@@ -193,7 +217,9 @@ std::vector<Diff> mainDetector(std::ifstream &file){
                 diff(word,length,file,resVec);
                 break;
             case BIN:
-                
+                //strcpy(word[0],word[1]);
+                strcpy(word[2],word[3]);
+                diff(word,length,file,resVec);
                 break;
         }
     }

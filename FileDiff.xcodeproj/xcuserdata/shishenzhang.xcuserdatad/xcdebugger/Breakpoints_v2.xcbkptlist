@@ -122,9 +122,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "177"
-            endingLineNumber = "177"
-            landmarkName = "mainDetector(std::ifstream &amp;file)"
-            landmarkType = "9">
+            endingLineNumber = "177">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -453,7 +451,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "91"
             endingLineNumber = "91"
-            landmarkName = "commonDiff(std::ifstream&amp; file,Diff&amp; dif)"
+            landmarkName = "commonDiff(std::ifstream&amp; file,Diff&amp; dif,int flag)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -501,7 +499,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "115"
             endingLineNumber = "115"
-            landmarkName = "commonDiff(std::ifstream&amp; file,Diff&amp; dif)"
+            landmarkName = "commonDiff(std::ifstream&amp; file,Diff&amp; dif,int flag)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
