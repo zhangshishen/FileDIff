@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-char buf[10240];
+static char buf[10240];
 int getDirectory2(char* dir,char fname[]){
     FILE* fs;
     //char fname[2][256];
@@ -87,6 +87,7 @@ int out_log(FILE* input,const char* out){
     return fclose(log);
 }
 void commonGenerator(const char* out){
+    
     char fname[4][256];
     char browse1[256];
     char browse2[256];
@@ -110,28 +111,11 @@ void paticularGenerator(const char* f1,const char* f2,const char* out){
     char command[512]="diff ";
     strcpy(command+5,f1);
     int i = strlen(command);
-    strcpy(command+i,f2);
+    strcpy(command+i+1,f2);
+    command[i]=' ';
     FILE* f = popen(command,"r");
     out_log(f,out);
     pclose(f);
 }
-int main(){
-    char fname[4][256];
-    char browse1[256];
-    char browse2[256];
-    getDirectory(fname);
-    createDirectory(fname[0],browse1);
-    int temp = strlen(browse1);
-    browse1[temp]=' ';
-    browse1[temp+1]=0;
-    createDirectory(fname[1],browse2);
-    char command[512]="diff ";
-    strcpy(command+5,browse1);
-    int i = strlen(command);
-    strcpy(command+i,browse2);
-    printf("%s\n",command);
-    FILE* f = popen(command,"r");
-    out_log(f,"log.txt");
-    pclose(f);
-}
+
 ///var/lib/docker/overlay/694c7cebf61379ee36d7c0058f819ecf99f546e4c73c6356aafd8b47469e1e99/upper/home/developer/.mozilla

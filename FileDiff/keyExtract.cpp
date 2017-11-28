@@ -35,7 +35,7 @@ int isHeader(char* word){
             else return false;
         }else {
             if(flag==3)
-            return 1;
+                return 1;
             else return 0;
         }
         word++;
@@ -53,8 +53,8 @@ int extractKey(std::string& str,char separator[],std::unordered_map<std::string,
     
     for(auto c:str){
         
-    
-            //detect every character of one line, extract the key
+        
+        //detect every character of one line, extract the key
         if(separator[c]!=1){
             temp+=c;    //is not separator
         }else{

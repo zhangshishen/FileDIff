@@ -16,9 +16,9 @@ int sqlReader(const char* database,const char* output){
         std::string tmp = "select * from " + sqltablesName[i]+" ;";
         readSqlCommand(db,rc,tmp.c_str());
     }
-    
+    sqltablesName.clear();
     sqlite3_close(db);
-    
+    fclose(outfile);
     return 0;
 }
 static int callback(void *NotUsed, int argc, char **argv, char **azColName){
