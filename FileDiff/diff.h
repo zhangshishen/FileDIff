@@ -26,6 +26,7 @@
 #define SIMPLE 0x01
 
 struct Diff;
+void scanLine(std::ifstream& file);
 template<class T> void initSeparator(std::initializer_list<T>& t);
 char* getName(char* word);
 char* getFormat(char* word);

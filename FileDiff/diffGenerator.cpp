@@ -117,5 +117,17 @@ void paticularGenerator(const char* f1,const char* f2,const char* out){
     out_log(f,out);
     pclose(f);
 }
+void jsonGenerator(const char* f1,const char* f2,const char* out){
+    char command[512]="jsondiff ";
+    strcpy(command+9,f1);
+    int i = strlen(command);
+    strcpy(command+i+1,f2);
+    command[i]=' ';
+    FILE* f = popen(command,"r");
+    out_log(f,out);
+    pclose(f);
+}
+
+
 
 ///var/lib/docker/overlay/694c7cebf61379ee36d7c0058f819ecf99f546e4c73c6356aafd8b47469e1e99/upper/home/developer/.mozilla

@@ -82,12 +82,72 @@ void initSeparator(const std::initializer_list<T>& t){
     }
 }
 
+void scanLine(std::ifstream& file){
+    int diffLine[4];
+    
+    while(1){
+        //file pointer
+        int lineByte = file.tellg();
+        file.getline(buf,102400);
+        //judge if current file diff finished
+        if(buf[0]>='0'&&buf[0]<='9'){
+            
+        }else{
+            file.seekg(lineByte);
+            break;
+        }
+        
+        std::string line(buf);
+        
+        char mid = lineNum(line, diffLine);
+        
+        //file 1 keyword extract
+        
+        if(mid=='c'||mid=='d')
+            for(int i = diffLine[0];i<=diffLine[1];i++){
+                
+                lineByte = file.tellg();
+                file.getline(buf,102400);
+                line = buf;
+                /*
+                 */
+                //line,separator,map1,lineByte
+                //call1(lineByte,line);
+            }
+        // \ No newline at end of file
+        
+        int tempL = file.tellg();
+        char temp;
+        file.get(temp);
+        if(temp == '\\') file.getline(buf,102400);
+        else file.seekg(tempL);
+        
+        
+        if(mid=='c')
+            file.getline(buf,102400);
+        
+        if(mid=='a'||mid=='c')
+            for(int i = diffLine[2];i<=diffLine[3];i++){
+                
+                lineByte = file.tellg();
+                file.getline(buf,102400);
+                line = buf;
+                /*
+                 */
+                
+            }
+    }
+}
+
+
 void commonDiff(std::ifstream& file,Diff& dif,int flag){
     
     int diffLine[4];
     
     initSeparator({'>' , '<' , '(' , ')' , ';' , ',' , '{' , '}' , '[' , ']' , ' ' , '\t'});
+    
     separator['>']=1;
+    
     std::unordered_map<std::string,int> map1;
     std::unordered_map<std::string,int> map2;
     
@@ -176,19 +236,40 @@ int diff(char **word,int n,std::ifstream &file,std::vector<Diff>& resVec){
     
     if(strcmp(fFormat,".json")==0||strcmp(fFormat,".JSON")==0)
     {
-        
+        std::string s1=dif.name+"1.txt",s2=dif.name+"2.txt";
+        std::string out_name = std::string(dif.name)+"diffout.txt";
         //JSON file differ sub-program
+        jsonGenerator(s1.c_str(),s2.c_str(),out_name.c_str());
+        scanLine(file);
+        
     }else if(strcmp(fFormat,".XML")==0||strcmp(fFormat,".xml")==0)
     {
-        //xmlfile for
+        
+        //
         //XML file differ sub-program
+        
     }else if(strcmp(fFormat,".sqlite")==0||strcmp(fFormat,".SQLITE")==0){
         
-        sqlReader(word[1],"file1.txt");
-        sqlReader(word[2],"file2.txt");
-        paticularGenerator("file1.txt","file2.txt","diffout.txt");
-        std::ifstream diffFile("diffout.txt");
+        
+        /*
+         use sql dump
+         generate text file by .sqlite file ,name by
+         */
+        
+        std::string s1=dif.name+"1.txt",s2=dif.name+"2.txt";    //tempfile name
+        
+        sqlReader(word[1],s1.c_str());
+        sqlReader(word[2],s2.c_str());
+        
+        std::string out_name = std::string(dif.name)+"diffout.txt";
+        
+        
+        paticularGenerator(s1.c_str(),s2.c_str(),out_name.c_str());
+        
+        
+        std::ifstream diffFile(out_name);
         commonDiff(diffFile,dif,0);
+        diffFile.close();
         
     }else if(strcmp(fFormat,".txt")==0||strcmp(fFormat,".js")==0)
     {
@@ -200,6 +281,9 @@ int diff(char **word,int n,std::ifstream &file,std::vector<Diff>& resVec){
     return 0;
     
 }
+
+
+
 
 //read diff file and output diff content
 
