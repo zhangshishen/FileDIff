@@ -5,20 +5,21 @@
 
 
 vector<string> getDiff(){
-    auto m = dockerGetId();
-    int count = 0;
+    auto mid = dockerGetId();
     vector<string> containerId;
-    for (auto &c:m){
+    for (auto &c:mid){
         if(dockerGetImageName(c)==containerName){
-            count++;
             containerId.push_back(c);
         }
     }
-    if(count != 2){
+    if(containerId.size()!= 2){
         cerr<<"fatal error!,more than two container running";
     }
-    for (auto &c:m){
-        
+    
+    for (auto &c:containerId){
+        auto diffContent = dockerDiff(c);
     }
+
+    //paticularGenerator()
     string command = dockerCreateCommand({"docker","diff","-aq"},' ');
 }

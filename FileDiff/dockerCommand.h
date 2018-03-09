@@ -11,3 +11,4 @@
 
 string dockerGetImageName(string containerId);
 vector<string> dockerGetId();
+vector<string> dockerDiff(const string& id);

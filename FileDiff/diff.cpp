@@ -82,7 +82,7 @@ void initSeparator(const std::initializer_list<T>& t){
     }
 }
 
-void commonDiff(std::ifstream& file,Diff& dif,int flag){
+void commonDiff(std::ifstream& file,Diff& dif,int flag){    // get the particular diff content from the result of "diff" command between two directory
     
     int diffLine[4];
     
