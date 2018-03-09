@@ -54,16 +54,19 @@ std::string getDir(char* word){
 char* getFormat(char* word){
     
     int pBegin = 0;
-    
-    while(word[pBegin]!='.'&&word[pBegin]!=0)
+    int res = 0;
+
+    while(word[pBegin]!=0)
     {
+	
+	if(word[pBegin]=='.'){
+		res = pBegin;	
+	}
         pBegin++;
     }
     
-    if(word[pBegin]==0)
-        return NULL;
-    else
-        return word+pBegin;
+
+        return word+res;
 }
 
 //main diff function read a line from word
@@ -180,14 +183,14 @@ int diff(char **word,int n,std::ifstream &file,std::vector<Diff>& resVec){
         //xmlfile for
         //XML file differ sub-program
     }else if(strcmp(fFormat,".sqlite")==0||strcmp(fFormat,".SQLITE")==0){
-        
-        sqlReader(dif.path1.c_str(),"file1.txt");
-        sqlReader(dif.path2.c_str(),"file2.txt");
-        paticularGenerator("file1.txt","file2.txt","diffout.txt");
+        std::string s1 = dif.name+"1.txt",s2=dif.name+"2.txt";
+        sqlReader(word[1],s1.c_str());
+        sqlReader(word[2],s2.c_str());
+        paticularGenerator(s1.c_str(),s1.c_str(),"diffout.txt");
         std::ifstream diffFile("diffout.txt");
-        commonDiff(diffFile,dif,1);
+        commonDiff(diffFile,dif,0);
         
-    }else
+    }else if(strcmp(fFormat,".txt")==0||strcmp(fFormat,".js")==0)
     {
         commonDiff(file,dif,1);
     }
@@ -218,7 +221,8 @@ std::vector<Diff> mainDetector(std::ifstream &file){
                 break;
             case BIN:
                 //strcpy(word[0],word[1]);
-                strcpy(word[2],word[3]);
+                strcpy(word[1],word[2]);
+     		strcpy(word[2],word[4]);
                 diff(word,length,file,resVec);
                 break;
         }

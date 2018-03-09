@@ -8,15 +8,15 @@
 
 #include "diffGenerator.hpp"
 
-#include <sys/types.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-char buf[10240];
+
+
+
+
+static char buf[10240];
 int getDirectory2(char* dir,char fname[]){
+
     FILE* fs;
-    //char fname[2][256];
+
     memset(buf,0,sizeof(buf));
     char d[256]="ls ";
     strcpy(d+3,dir);
@@ -40,10 +40,14 @@ int getDirectory2(char* dir,char fname[]){
     }
     pclose(fs);
     return -1;
+
 }
 int getDirectory(char fname[][256]){
+
     FILE* fs;
+
     //char fname[2][256];
+
     memset(buf,0,sizeof(buf));
     fs=popen("ls /var/lib/docker/overlay2","r");
     int r = fread(buf,sizeof(char),sizeof(buf),fs);
@@ -63,10 +67,27 @@ int getDirectory(char fname[][256]){
         pclose(fs);
         return fnamen;
     }
+
     pclose(fs);
+
     return -1;
+
 }
+
+string dockerCreateCommand(const vector<string>& vs,char separator){
+    string res;
+
+    for(auto& c:vs){
+        res+=c;
+        res+= separator;
+    }
+    
+    res.pop_back();
+    return res;
+}
+
 int createDirectory(char* s,char* ret){
+
     char *m= "/var/lib/docker/overlay2/";
     char *n="/diff/root/.mozilla/firefox/";
     strcpy(ret,m);
@@ -76,8 +97,10 @@ int createDirectory(char* s,char* ret){
     getDirectory2(ret,a);
     strcpy(ret+strlen(ret),a);
     return 1;
+
 }
 int out_log(FILE* input,const char* out){
+
     FILE* log;
     memset(buf,0,sizeof(buf));
     log=fopen(out,"w+");
@@ -85,8 +108,10 @@ int out_log(FILE* input,const char* out){
     while(r=fread(buf,1,sizeof(buf),input))
         fwrite(buf,1,r,log);
     return fclose(log);
+
 }
 void commonGenerator(const char* out){
+    
     char fname[4][256];
     char browse1[256];
     char browse2[256];
@@ -104,34 +129,18 @@ void commonGenerator(const char* out){
     FILE* f = popen(command,"r");
     out_log(f,out);
     pclose(f);
+
 }
 void paticularGenerator(const char* f1,const char* f2,const char* out){
     
     char command[512]="diff ";
     strcpy(command+5,f1);
     int i = strlen(command);
-    strcpy(command+i,f2);
+    strcpy(command+i+1,f2);
+    command[i]=' ';
     FILE* f = popen(command,"r");
     out_log(f,out);
     pclose(f);
 }
-int main(){
-    char fname[4][256];
-    char browse1[256];
-    char browse2[256];
-    getDirectory(fname);
-    createDirectory(fname[0],browse1);
-    int temp = strlen(browse1);
-    browse1[temp]=' ';
-    browse1[temp+1]=0;
-    createDirectory(fname[1],browse2);
-    char command[512]="diff ";
-    strcpy(command+5,browse1);
-    int i = strlen(command);
-    strcpy(command+i,browse2);
-    printf("%s\n",command);
-    FILE* f = popen(command,"r");
-    out_log(f,"log.txt");
-    pclose(f);
-}
+
 ///var/lib/docker/overlay/694c7cebf61379ee36d7c0058f819ecf99f546e4c73c6356aafd8b47469e1e99/upper/home/developer/.mozilla

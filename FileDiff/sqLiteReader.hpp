@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 
-#include <sqlite3.h>
+#include "sqlite3.h"
 #include "vector"
 #include "string"
 #endif /* sqLiteReader_hpp */

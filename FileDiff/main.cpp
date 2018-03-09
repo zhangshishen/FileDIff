@@ -12,11 +12,10 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-
-    std::string path = "/Users/shishenzhang/log2.txt";
+    commonGenerator("log.txt");
+    std::string path = "log.txt";
     ifstream fa(path);
-    
-    ofstream of("/Users/shishenzhang/out.txt");
+    ofstream of("outa.txt");
     streambuf* fileBuf = of.rdbuf();
     
     cout.rdbuf(fileBuf);
@@ -30,6 +29,7 @@ int main(int argc, char *argv[])
         }
         cout<<endl;
     }
+    of.close();
     return 0;
     
 }

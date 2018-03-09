@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include "stdlib.h"
 #include "string"
-
+#include "cstring"
 #endif /* parser_h */
 
 #define DIFFER 0

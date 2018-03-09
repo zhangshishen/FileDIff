@@ -11,7 +11,7 @@
 
 
 
-char* keyword[5]={"diff","and","Binary","file","differ"};
+char* keyword[6]={"diff","and","Binary","file","differ","Only"};
 
 
 // first line of diff command *[,*]c[,*]
@@ -42,12 +42,15 @@ char lineNum(const std::string& s,int res[4]){
 int sentenceFormat(char **word){
     if(strcmp(word[0],keyword[0])==0){
         return DIFF;
-    }else if(strcmp(word[1],keyword[2])){
+    }else if(strcmp(word[0],keyword[5])==0){
+        
+    }
+    else if(strcmp(word[0],keyword[2])==0){
         return BIN;
-    }else if(strcmp(word[4],keyword[4])){
+    }else if(strcmp(word[4],keyword[4])==0){
         //return BIN;
     }
-    return 0;
+    return -1;
 }
 
 
@@ -64,7 +67,7 @@ int readLine(char **word,char* buf){
     {
         if(*pBuf==' ')
         {
-            word[index] = (char*) malloc(j-i+1);
+            word[index] = (char*) malloc(256);
             int temp = 0;
             
             while(i!=j){
