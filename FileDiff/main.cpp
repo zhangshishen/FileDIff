@@ -12,6 +12,7 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+    //initLog();
     commonGenerator("log.txt");
     std::string path = "log.txt";
     ifstream fa(path);
