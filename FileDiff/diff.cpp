@@ -72,13 +72,13 @@ char* getFormat(char* word){
 //main diff function read a line from word
 char buf[102400];
 char separator[256];
-
+char sqlSeparator[256];
 //diff for common file
 
 template<class T>
-void initSeparator(const std::initializer_list<T>& t){
+void initSeparator(const std::initializer_list<T>& t,char* dst){
     for(auto& param:t){
-        separator[param] = 1;
+        dst[param] = 1;
     }
 }
 
@@ -86,7 +86,8 @@ void commonDiff(std::ifstream& file,Diff& dif,int flag){    // get the particula
     
     int diffLine[4];
     
-    initSeparator({'>' , '<' , '(' , ')' , ';' , ',' , '{' , '}' , '[' , ']' , ' ' , '\t'});
+    initSeparator({'>' , '<' , '(' , ')' , ';' , ',' , '{' , '}' , '[' , ']' , ' ' , '\t'},separator);
+    initSeparator({'>' , '<' , '(' , ')' , ';' , ',' , '{' , '}' , '[' , ']' , ' ' , '\t'},sqlSeparator);
     separator['>']=1;
     std::unordered_map<std::string,int> map1;
     std::unordered_map<std::string,int> map2;
@@ -144,13 +145,14 @@ void commonDiff(std::ifstream& file,Diff& dif,int flag){    // get the particula
             lineByte = file.tellg();
             file.getline(buf,102400);
             line = buf;
-            if(flag==FLAT) {
-                map2[line] = 0;
+            if(flag==FLAT) {    //sqlite diff
+                //map2[line] = 0;
                 /**
                  
                  TODO
                  
                  **/
+                extractKey(line,separator,map2,lineByte);
             }
             else extractKey(line,separator,map2,lineByte);
         
@@ -183,13 +185,7 @@ int diff(char **word,int n,std::ifstream &file,std::vector<Diff>& resVec){
         //xmlfile for
         //XML file differ sub-program
     }else if(strcmp(fFormat,".sqlite")==0||strcmp(fFormat,".SQLITE")==0){
-        std::string s1 = dif.name+"1.txt",s2=dif.name+"2.txt";
-        sqlReader(word[1],s1.c_str());
-        sqlReader(word[2],s2.c_str());
-        paticularGenerator(s1.c_str(),s1.c_str(),"diffout.txt");
-        std::ifstream diffFile("diffout.txt");
-        commonDiff(diffFile,dif,0);
-        
+        getDiffOfSqlite(word,dif.name);
     }else if(strcmp(fFormat,".txt")==0||strcmp(fFormat,".js")==0)
     {
         commonDiff(file,dif,1);
@@ -251,9 +247,3 @@ std::vector<std::pair<std::string,int>> testKey(std::unordered_map<std::string,i
     }
     return res;
 }
-
-
-
-
-
-

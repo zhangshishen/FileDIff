@@ -2,6 +2,7 @@
 
 std::vector<std::string> sqltablesName;
 FILE* outfile;
+
 int sqlReader(const char* database,const char* output){
     outfile = fopen(output,"w+");
     if(outfile==NULL){
@@ -21,14 +22,24 @@ int sqlReader(const char* database,const char* output){
     fclose(outfile);
     return 0;
 }
+
+
+
 static int callback(void *NotUsed, int argc, char **argv, char **azColName){
     int i;
+    if(argc==0) return 0;
+    sqlQuery sql;
     
+    //sqlDiff.push_back()
     for(i=0; i<argc; i++)
     {
-        fprintf(outfile,"%s = %s\t", azColName[i], argv[i] ? argv[i] : "NULL");
+        sql.setValue(azColName[i], strcmp(argv[i],"")!=0 ? argv[i] : "NULL");
+        //fprintf(outfile,"%s = %s\t", azColName[i], argv[i] ? argv[i] : "NULL");
     }
-    fprintf(outfile,"\n");
+
+    sqlDiff.push_back(sql);
+    //sqlDiff.push_back(sqlquery);
+    //fprintf(outfile,"\n");
     return 0;
 }
 
@@ -75,4 +86,21 @@ int readSqlCommand(sqlite3* db,int rc, const char *query){  //argv[1] database a
     
     
     return 0;
+}
+
+
+void getDiffOfSqlite(char** word,string& name){
+
+    std::string s1 = name+"1.txt",s2=name+"2.txt";
+    sqlReader(word[1],s1.c_str());
+    auto m = sqlDiff;
+    sqlDiff.clear();
+    sqlReader(word[2],s2.c_str());
+    auto n = sqlDiff;
+    sqlDiff.clear();
+    string outName = name+"-diffout.txt";
+
+    stringToFile(outName,getDiffofSqldiff(m,n));
+    
+
 }

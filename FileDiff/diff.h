@@ -21,6 +21,9 @@
 #include "fstream"
 #include "sqLiteReader.hpp"
 #include "diffGenerator.hpp"
+#include "sqlDiff.h"
+
+#include "tools.h"
 
 #define FLAT 0x00
 #define SIMPLE 0x01

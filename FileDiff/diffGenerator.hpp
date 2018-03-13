@@ -20,7 +20,7 @@
 #endif /* diffGenerator_hpp */
 using namespace std;
 
-string containerName = "firefox";
+//string containerName = "firefox";
 
 void commonGenerator(const char* out);     //generator differ file between two new container
 void paticularGenerator(const char* f1,const char* f2,const char* out);

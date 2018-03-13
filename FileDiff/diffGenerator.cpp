@@ -89,7 +89,7 @@ string dockerCreateCommand(const vector<string>& vs,char separator){
 int createDirectory(char* s,char* ret){
 
     char *m= "/var/lib/docker/overlay2/";
-    char *n="/diff/root/.mozilla/firefox/";
+    char *n= "/diff/root/.mozilla/firefox/";
     strcpy(ret,m);
     strcpy(ret+strlen(m),s);
     strcpy(ret+strlen(m)+strlen(s),n);
