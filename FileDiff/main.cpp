@@ -23,12 +23,7 @@ int main(int argc, char *argv[])
     
     auto m = mainDetector(fa);
     for(auto& c:m){
-        cout<<"File Name:\t"<<c.name<<endl;
-        cout<<"Diff Content:\t"<<endl;
-        for(auto& n:c.diffContent){
-            cout<<n.first<<endl;
-        }
-        cout<<endl;
+        c.print();
     }
     of.close();
     return 0;

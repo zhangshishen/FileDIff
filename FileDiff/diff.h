@@ -33,13 +33,13 @@ template<class T> void initSeparator(std::initializer_list<T>& t);
 char* getName(char* word);
 char* getFormat(char* word);
 std::vector<Diff> mainDetector(std::ifstream &file);
-int diff(char **word,int n,std::vector<Diff>& resVec);
+int diff(char **word,int n,std::vector<Diff>& resVec,int flag);
 std::vector<std::pair<std::string,int>> testKey(std::unordered_map<std::string,int>&key1,std::unordered_map<std::string,int>&key2);
 //int testDiff(std::string str1,std::string str2);
 void commonDiff(std::ifstream& file,Diff& dif,int flag);
 
 std::string getDir(char* word);
-
+Diff stringToDiff(const string& str);
 //struct which saving differ file's info
 
 struct Diff{
@@ -54,6 +54,7 @@ struct Diff{
     
     std::vector<std::pair<std::string,int>> diffContent;
     
+    void print();
     
     
 };

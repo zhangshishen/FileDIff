@@ -19,6 +19,7 @@
 #define BIN 1
 #define DIFF 2
 #define DIR 3
+#define ONLY 4
 
 int sentenceFormat(char **word);
 char lineNum(const std::string& s,int res[4]);

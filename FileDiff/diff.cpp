@@ -34,6 +34,18 @@ char* getName(char* word){
     
 }
 
+//turn a string to Diff
+Diff stringToDiff(const string& str){
+    Diff dif;
+    auto c = separateString(str,'\n');
+    if(c.size()%2){
+        cerr<<" diff size is odd\n";
+    }
+    for(int i = 0;i<c.size();i++){
+        dif.diffContent.push_back(pair<string,int>(c[i],1));
+    }
+    return dif;
+}
 //get the directory of file full directory
 
 std::string getDir(char* word){
@@ -59,12 +71,12 @@ char* getFormat(char* word){
     while(word[pBegin]!=0)
     {
 	
-	if(word[pBegin]=='.'){
-		res = pBegin;	
-	}
+	    if(word[pBegin]=='.'){
+		    res = pBegin;	
+	    }
         pBegin++;
     }
-    
+    if(res==0) return NULL;
 
         return word+res;
 }
@@ -110,7 +122,7 @@ void commonDiff(std::ifstream& file,Diff& dif,int flag){    // get the particula
     
     //file 1 keyword extract
         
-        if(mid=='c'||mid=='d')
+        if(mid=='c'||mid=='d'){
         for(int i = diffLine[0];i<=diffLine[1];i++){
         
             lineByte = file.tellg();
@@ -135,11 +147,11 @@ void commonDiff(std::ifstream& file,Diff& dif,int flag){    // get the particula
         if(temp == '\\') file.getline(buf,102400);
         else file.seekg(tempL);
         
-        
+        }
         if(mid=='c')
             file.getline(buf,102400);
         
-        if(mid=='a'||mid=='c')
+        if(mid=='a'||mid=='c'){
         for(int i = diffLine[2];i<=diffLine[3];i++){
         
             lineByte = file.tellg();
@@ -157,25 +169,48 @@ void commonDiff(std::ifstream& file,Diff& dif,int flag){    // get the particula
             else extractKey(line,separator,map2,lineByte);
         
         }
+        int tempL = file.tellg();
+        char temp;
+        file.get(temp);
+        if(temp == '\\') file.getline(buf,102400);
+        else file.seekg(tempL);
+        }
+
     }
     
     dif.diffContent = testKey(map1,map2);
     
 }
 
-
-int diff(char **word,int n,std::ifstream &file,std::vector<Diff>& resVec){
+void Diff::print(){
+        cout<<"File Name:\t"<<name<<endl;
+        cout<<"Diff Content:\t"<<endl;
+            for(auto& n:diffContent){
+                cout<<n.first<<endl;
+            }
+        cout<<endl;
+        
+}
+int diff(char **word,int n,std::ifstream &file,std::vector<Diff>& resVec,int flag){
     
-    char* fName = getName(word[1]);
+    if(flag==1){    //diff
+
+    }
+    char* fName = getName(word[2]);
     char* fFormat = getFormat(fName);
     
     Diff dif;
     
-    dif.path1 = getDir(word[1]);
-    dif.path2 = getDir(word[2]);
+    dif.path1 = getDir(word[2]);
+    dif.path2 = getDir(word[3]);
     
     dif.name = fName;
-    
+    if(fFormat==NULL){
+        //no format
+        if(flag==1){
+            commonDiff(file,dif,1);
+        }
+    }else
     if(strcmp(fFormat,".json")==0||strcmp(fFormat,".JSON")==0)
     {
         
@@ -185,8 +220,13 @@ int diff(char **word,int n,std::ifstream &file,std::vector<Diff>& resVec){
         //xmlfile for
         //XML file differ sub-program
     }else if(strcmp(fFormat,".sqlite")==0||strcmp(fFormat,".SQLITE")==0){
-        getDiffOfSqlite(word,dif.name);
-    }else if(strcmp(fFormat,".txt")==0||strcmp(fFormat,".js")==0)
+
+        auto m = getDiffOfSqlite(word,dif.name);
+        dif = stringToDiff(m);
+        dif.name = fName;
+        
+
+    }else if(strcmp(fFormat,".txt")==0||strcmp(fFormat,".js")==0||flag==1)
     {
         commonDiff(file,dif,1);
     }
@@ -205,21 +245,27 @@ std::vector<Diff> mainDetector(std::ifstream &file){
     std::vector<Diff> resVec;
     while(!file.eof()){
         file.getline(buf, 102400);
+        //if(strlen(buf)>1000)
         int length = readLine(word, buf);
-        if(length>=10){
+        if(length>=10){     //long line
             
         }
         int sentence = sentenceFormat(word);
     
         switch(sentence){
             case DIFF:
-                diff(word,length,file,resVec);
+                diff(word,length,file,resVec,1);
                 break;
             case BIN:
                 //strcpy(word[0],word[1]);
-                strcpy(word[1],word[2]);
-     		strcpy(word[2],word[4]);
-                diff(word,length,file,resVec);
+                //strcpy(word[1],word[2]);
+     		    //strcpy(word[2],word[4]);
+                diff(word,length,file,resVec,0);
+                break;
+            case ONLY:
+                //file.getline(buf,102400);
+                break;
+            default:
                 break;
         }
     }

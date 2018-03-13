@@ -49,6 +49,8 @@ int sentenceFormat(char **word){
         return BIN;
     }else if(strcmp(word[4],keyword[4])==0){
         //return BIN;
+    }else if(strcmp(word[4],"Only")==0){
+        return ONLY;
     }
     return -1;
 }
@@ -65,6 +67,7 @@ int readLine(char **word,char* buf){
     
     while(*pBuf!=0)
     {
+        if(index>20) return 30;
         if(*pBuf==' ')
         {
             word[index] = (char*) malloc(256);

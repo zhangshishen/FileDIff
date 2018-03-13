@@ -34,7 +34,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName){
     for(i=0; i<argc; i++)
     {
         sql.setValue(azColName[i], strcmp(argv[i],"")!=0 ? argv[i] : "NULL");
-        //fprintf(outfile,"%s = %s\t", azColName[i], argv[i] ? argv[i] : "NULL");
+        fprintf(outfile,"%s = %s\t", azColName[i], argv[i] ? argv[i] : "NULL");
     }
 
     sqlDiff.push_back(sql);
@@ -89,18 +89,18 @@ int readSqlCommand(sqlite3* db,int rc, const char *query){  //argv[1] database a
 }
 
 
-void getDiffOfSqlite(char** word,string& name){
+string getDiffOfSqlite(char** word,string& name){
 
     std::string s1 = name+"1.txt",s2=name+"2.txt";
-    sqlReader(word[1],s1.c_str());
+    sqlReader(word[2],s1.c_str());
     auto m = sqlDiff;
     sqlDiff.clear();
-    sqlReader(word[2],s2.c_str());
+    sqlReader(word[4],s2.c_str());
     auto n = sqlDiff;
     sqlDiff.clear();
     string outName = name+"-diffout.txt";
 
-    stringToFile(outName,getDiffofSqldiff(m,n));
+    return getDiffofSqldiff(m,n);
     
 
 }

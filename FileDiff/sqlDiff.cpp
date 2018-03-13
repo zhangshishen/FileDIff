@@ -21,12 +21,14 @@ int sqlQuery::getDiff(const sqlQuery& sql) const{
         return res;
 }
 
+
+
 string sqlQuery::outDiff(const sqlQuery& sql) const{
         string res;
         for(int i = 0;i<column.size();i++){
             if(value[i]!=sql.value[i]){
                 res+=value[i];
-                res+=" != ";
+                res+="\n";
                 res+=sql.value[i];
                 res+='\n';
             }
@@ -39,7 +41,7 @@ string sqlQuery::outData() const{
         res+=column[i];
                 res+=" = ";
                 res+=value[i];
-                res+=' , ';
+                res+=" , ";
         
     }
     return res;
@@ -50,25 +52,6 @@ void sqlQuery::setValue(const string& Key,const string& Value){
 }
 
 string getDiffofSqldiff(const vector<sqlQuery> &d1,const vector<sqlQuery>& d2){
-    /*int i;
-    string ret;
-    for(auto& c:d1){
-        int max = 10000;
-        i=0;
-        int res = 0;
-        for(auto &d:d2){
-            if(max>c.getDiff(d)){
-                max =c.getDiff(d);
-                res = i;
-            }
-            i++;
-        }
-        if(c.getDiff(d2[res])!=10000){
-            ret+=c.outDiff(d2[res]);
-        }else{
-            //no matching query
-        }
-    }*/
     if(d1.size()>d2.size()){
         cerr<<"cookie size not equal\n";
     }

@@ -89,7 +89,7 @@ string dockerCreateCommand(const vector<string>& vs,char separator){
 int createDirectory(char* s,char* ret){
 
     char *m= "/var/lib/docker/overlay2/";
-    char *n= "/diff/root/.mozilla/firefox/";
+    char *n= "/diff/";
     strcpy(ret,m);
     strcpy(ret+strlen(m),s);
     strcpy(ret+strlen(m)+strlen(s),n);
@@ -121,8 +121,8 @@ void commonGenerator(const char* out){
     browse1[temp]=' ';
     browse1[temp+1]=0;
     createDirectory(fname[1],browse2);
-    char command[512]="diff ";
-    strcpy(command+5,browse1);
+    char command[512]="diff -r ";
+    strcpy(command+strlen(command),browse1);
     int i = strlen(command);
     strcpy(command+i,browse2);
     printf("%s\n",command);
@@ -133,8 +133,8 @@ void commonGenerator(const char* out){
 }
 void paticularGenerator(const char* f1,const char* f2,const char* out){
     
-    char command[512]="diff ";
-    strcpy(command+5,f1);
+    char command[512]="diff -r ";
+    strcpy(command+strlen(command),f1);
     int i = strlen(command);
     strcpy(command+i+1,f2);
     command[i]=' ';
