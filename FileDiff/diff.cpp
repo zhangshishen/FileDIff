@@ -18,7 +18,7 @@
  
  
  */
-//get the name from file full directory
+// get the name from file full directory
 char* getName(char* word){
     
     auto p = word;
@@ -34,19 +34,19 @@ char* getName(char* word){
     
 }
 
-//turn a string to Diff
-Diff stringToDiff(const string& str){
+// turn a string to Diff
+Diff stringToDiff(const string& name,const string& str){
     Diff dif;
     auto c = separateString(str,'\n');
     if(c.size()%2){
-        cerr<<" diff size is odd\n";
+        cerr<<"file "<<name<<" diff size is odd\n";
     }
     for(int i = 0;i<c.size();i++){
         dif.diffContent.push_back(pair<string,int>(c[i],1));
     }
     return dif;
 }
-//get the directory of file full directory
+// get the directory of file full directory
 
 std::string getDir(char* word){
     
@@ -222,7 +222,7 @@ int diff(char **word,int n,std::ifstream &file,std::vector<Diff>& resVec,int fla
     }else if(strcmp(fFormat,".sqlite")==0||strcmp(fFormat,".SQLITE")==0){
 
         auto m = getDiffOfSqlite(word,dif.name);
-        dif = stringToDiff(m);
+        dif = stringToDiff(fName,m);
         dif.name = fName;
         
 

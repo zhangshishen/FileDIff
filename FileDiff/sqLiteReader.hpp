@@ -22,11 +22,11 @@ using namespace std;
  
  **/
 
-int sqlReader(const char* database,const char* out); //database: database file name ;
+vector<sqlQuery> sqlReader(const char* database,const char* out); //database: database file name ;
 
 
 
-int readSqlCommand(sqlite3* db,int rc, const char *query);
+int readSqlCommand(sqlite3* db,int rc, const char *query,vector<sqlQuery>* ret);
 int sqlInit(sqlite3** db,const char* database);
 int getTableName(sqlite3* db,int rc);
 static int callback(void *NotUsed, int argc, char **argv, char **azColName);

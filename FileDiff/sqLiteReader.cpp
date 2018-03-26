@@ -3,29 +3,30 @@
 std::vector<std::string> sqltablesName;
 FILE* outfile;
 
-int sqlReader(const char* database,const char* output){
+std::vector<sqlQuery> sqlReader(const char* database,const char* output){
     outfile = fopen(output,"w+");
     if(outfile==NULL){
         fprintf(stderr, "cannot open file %s \n",output);
-        return -1;
+        return {};
     }
+    std::vector<sqlQuery> ret;
     sqlite3* db;
     int rc = sqlInit(&db, database);
     getTableName(db,rc);
     
     for(int i = 0;i< sqltablesName.size();i++){
         std::string tmp = "select * from " + sqltablesName[i]+" ;";
-        readSqlCommand(db,rc,tmp.c_str());
+        readSqlCommand(db,rc,tmp.c_str(),&ret);
     }
     sqltablesName.clear();
     sqlite3_close(db);
     fclose(outfile);
-    return 0;
+    return ret;
 }
 
 
 
-static int callback(void *NotUsed, int argc, char **argv, char **azColName){
+static int callback(void *ret, int argc, char **argv, char **azColName){
     int i;
     if(argc==0) return 0;
     sqlQuery sql;
@@ -33,11 +34,11 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName){
     //sqlDiff.push_back()
     for(i=0; i<argc; i++)
     {
-        sql.setValue(azColName[i], strcmp(argv[i],"")!=0 ? argv[i] : "NULL");
+        sql.setValue(azColName[i], argv[i] ? argv[i] : "NULL");
         fprintf(outfile,"%s = %s\t", azColName[i], argv[i] ? argv[i] : "NULL");
     }
 
-    sqlDiff.push_back(sql);
+    ((vector<sqlQuery>*)ret)->push_back(sql);
     //sqlDiff.push_back(sqlquery);
     //fprintf(outfile,"\n");
     return 0;
@@ -65,7 +66,7 @@ int getTableName(sqlite3* db,int rc)
     rc = sqlite3_exec(db, "SELECT name FROM sqlite_master WHERE type='table';", getTableNameCallback, 0, &zErrMsg);
     return 0;
 }
-int readSqlCommand(sqlite3* db,int rc, const char *query){  //argv[1] database argv[2]
+int readSqlCommand(sqlite3* db,int rc, const char *query,vector<sqlQuery>* ret){  //argv[1] database argv[2]
     
     //sqlite3 *db;
     char *zErrMsg = 0;
@@ -77,7 +78,7 @@ int readSqlCommand(sqlite3* db,int rc, const char *query){  //argv[1] database a
         sqlite3_close(db);
         return(1);
     }
-    rc = sqlite3_exec(db, query, callback, 0, &zErrMsg);
+    rc = sqlite3_exec(db, query, callback, (void*)ret, &zErrMsg);
     if( rc!=SQLITE_OK )
     {
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
@@ -92,15 +93,13 @@ int readSqlCommand(sqlite3* db,int rc, const char *query){  //argv[1] database a
 string getDiffOfSqlite(char** word,string& name){
 
     std::string s1 = name+"1.txt",s2=name+"2.txt";
-    sqlReader(word[2],s1.c_str());
-    auto m = sqlDiff;
-    sqlDiff.clear();
-    sqlReader(word[4],s2.c_str());
-    auto n = sqlDiff;
-    sqlDiff.clear();
-    string outName = name+"-diffout.txt";
+    auto diff1 = sqlReader(word[2],s1.c_str());
+    auto diff2 = sqlReader(word[4],s2.c_str());
+    //sqlDiff.clear();
 
-    return getDiffofSqldiff(m,n);
+    //string outName = name+"-diffout.txt";
+
+    return getDiffofSqldiff(diff1,diff2);
     
 
 }
