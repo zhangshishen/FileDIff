@@ -51,6 +51,14 @@ void sqlQuery::setValue(const string& Key,const string& Value){
     value.push_back(Value);
 }
 
+string sqlQuery::GetString() const{
+    string res;
+    for(auto& s:value){
+        res+=s;
+    }
+    return res;
+}
+
 string getDiffofSqldiff(const vector<sqlQuery> &d1,const vector<sqlQuery>& d2){
     if(d1.size()>d2.size()){
         cerr<<"cookie size not equal\n";
@@ -74,4 +82,26 @@ string getDiffofSqldiff(const vector<sqlQuery> &d1,const vector<sqlQuery>& d2){
     return res;
 }
 
+bool sqlCompare::operator()(const sqlQuery& sql1,const sqlQuery& sql2){
+    return sql1.GetString()<sql2.GetString();
+}
+
+
+std::string exec(const char* cmd) {
+    char buffer[128];
+    std::string result = "";
+    FILE* pipe = popen(cmd, "r");
+    if (!pipe) throw std::runtime_error("popen() failed!");
+    try {
+        while (!feof(pipe)) {
+            if (fgets(buffer, 128, pipe) != NULL)
+                result += buffer;
+        }
+    } catch (...) {
+        pclose(pipe);
+        throw;
+    }
+    pclose(pipe);
+    return result;
+}
 

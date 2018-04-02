@@ -12,6 +12,11 @@ std::vector<sqlQuery> sqlReader(const char* database,const char* output){
     std::vector<sqlQuery> ret;
     sqlite3* db;
     int rc = sqlInit(&db, database);
+
+    if( rc ){
+    // failed
+        fprintf(stderr, "ERROR: Can't open database: %s\n", sqlite3_errmsg(db));
+    }
     getTableName(db,rc);
     
     for(int i = 0;i< sqltablesName.size();i++){
@@ -93,13 +98,27 @@ int readSqlCommand(sqlite3* db,int rc, const char *query,vector<sqlQuery>* ret){
 string getDiffOfSqlite(char** word,string& name){
 
     std::string s1 = name+"1.txt",s2=name+"2.txt";
+
     auto diff1 = sqlReader(word[2],s1.c_str());
     auto diff2 = sqlReader(word[4],s2.c_str());
-    //sqlDiff.clear();
 
+    sort(diff1.begin(),diff1.end());
+    sort(diff2.begin(),diff2.end());
+
+    s1+="-temp",s2+="-temp";
+    for(auto& c:diff1){
+        c.toFile(s1);
+    }
+    for(auto& c:diff2){
+        c.toFile(s2);
+    }
+    //sqlDiff.clear();
+    auto temp = name;
+    temp+="-diff.txt";
+    paticularGenerator(s1.c_str(),s2.c_str(),temp.c_str());
     //string outName = name+"-diffout.txt";
 
-    return getDiffofSqldiff(diff1,diff2);
+    return "";
     
 
 }

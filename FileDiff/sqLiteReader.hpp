@@ -11,6 +11,9 @@
 #include "sqlDiff.h"
 #include "tools.h"
 #include "string.h"
+#include "algorithm"
+
+#include "diffGenerator.hpp"
 #endif /* sqLiteReader_hpp */
 
 #define sqliteClose() sqlite3_close(db)

@@ -191,6 +191,8 @@ void Diff::print(){
         cout<<endl;
         
 }
+
+
 int diff(char **word,int n,std::ifstream &file,std::vector<Diff>& resVec,int flag){
     
     if(flag==1){    //diff
@@ -221,10 +223,9 @@ int diff(char **word,int n,std::ifstream &file,std::vector<Diff>& resVec,int fla
         //XML file differ sub-program
     }else if(strcmp(fFormat,".sqlite")==0||strcmp(fFormat,".SQLITE")==0){
 
-        auto m = getDiffOfSqlite(word,dif.name);
-        dif = stringToDiff(fName,m);
-        dif.name = fName;
-        
+        getDiffOfSqlite(word,dif.name);
+        //dif = stringToDiff(fName,m);
+        //dif.name = fName;
 
     }else if(strcmp(fFormat,".txt")==0||strcmp(fFormat,".js")==0||flag==1)
     {
@@ -257,9 +258,7 @@ std::vector<Diff> mainDetector(std::ifstream &file){
                 diff(word,length,file,resVec,1);
                 break;
             case BIN:
-                //strcpy(word[0],word[1]);
-                //strcpy(word[1],word[2]);
-     		    //strcpy(word[2],word[4]);
+
                 diff(word,length,file,resVec,0);
                 break;
             case ONLY:
