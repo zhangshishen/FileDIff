@@ -39,6 +39,12 @@ static int callback(void *ret, int argc, char **argv, char **azColName){
     //sqlDiff.push_back()
     for(i=0; i<argc; i++)
     {
+        const string id("id");
+        
+
+        if(id==azColName[i]){
+            continue;
+        }
         sql.setValue(azColName[i], argv[i] ? argv[i] : "NULL");
         fprintf(outfile,"%s = %s\t", azColName[i], argv[i] ? argv[i] : "NULL");
     }

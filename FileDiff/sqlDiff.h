@@ -34,7 +34,8 @@ public:
             temp.erase(temp.end()-6,temp.end());
         if(temp.size()>=11)
             temp.erase(temp.end()-3,temp.end());
-
+        if(temp.size()>=9)
+            return false;
         string curTime = exec( "date +%s" );    //include \n
         curTime.pop_back();
 

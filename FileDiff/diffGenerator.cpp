@@ -110,6 +110,8 @@ int out_log(FILE* input,const char* out){
     return fclose(log);
 
 }
+
+
 void commonGenerator(const char* out){
     
     char fname[4][256];
@@ -131,6 +133,7 @@ void commonGenerator(const char* out){
     pclose(f);
 
 }
+
 void paticularGenerator(const char* f1,const char* f2,const char* out){
     
     char command[512]="diff -r ";
@@ -142,5 +145,4 @@ void paticularGenerator(const char* f1,const char* f2,const char* out){
     out_log(f,out);
     pclose(f);
 }
-
 ///var/lib/docker/overlay/694c7cebf61379ee36d7c0058f819ecf99f546e4c73c6356aafd8b47469e1e99/upper/home/developer/.mozilla

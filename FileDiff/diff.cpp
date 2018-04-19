@@ -212,10 +212,11 @@ int diff(char **word,int n,std::ifstream &file,std::vector<Diff>& resVec,int fla
         if(flag==1){
             commonDiff(file,dif,1);
         }
+
     }else
     if(strcmp(fFormat,".json")==0||strcmp(fFormat,".JSON")==0)
     {
-        
+        commonDiff(file,dif,1);
         //JSON file differ sub-program
     }else if(strcmp(fFormat,".XML")==0||strcmp(fFormat,".xml")==0)
     {
