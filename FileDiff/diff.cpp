@@ -63,7 +63,7 @@ std::string getDir(char* word){
     
 }
 
-char* getFormat(char* word){
+const char* getFormat(const char* word){
     
     int pBegin = 0;
     int res = 0;
@@ -78,7 +78,7 @@ char* getFormat(char* word){
     }
     if(res==0) return NULL;
 
-        return word+res;
+    return word+res;
 }
 
 //main diff function read a line from word
@@ -198,8 +198,8 @@ int diff(char **word,int n,std::ifstream &file,std::vector<Diff>& resVec,int fla
     if(flag==1){    //diff
 
     }
-    char* fName = getName(word[2]);
-    char* fFormat = getFormat(fName);
+    const char* fName = getName(word[2]);
+    const char* fFormat = getFormat(fName);
     
     Diff dif;
     

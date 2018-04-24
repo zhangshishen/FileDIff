@@ -126,5 +126,4 @@ string getDiffOfSqlite(char** word,string& name){
 
     return "";
     
-
 }
