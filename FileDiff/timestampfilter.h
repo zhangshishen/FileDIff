@@ -8,9 +8,10 @@ typedef string(*filterFunc)(const string&);
 
 string mainTimeStampFilter(const string& in);
 
-class timeStampFilter:public Filter{
+class TimeStampFilter:public Filter{
     virtual string filter(const string&) const;
     virtual bool SeparatorSelector(char c) const;
     virtual bool isTargetFile(const string&) const;
 };
+string timeStampFilter(const string& s,const string& targetTimeStamp);
 //string wordScanner(const string& inFile,filterFunc filter);

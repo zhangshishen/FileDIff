@@ -13,10 +13,14 @@ public:
     string name = "pre";
     int mutableFlag = 0;
     vector<string> nameFilter;
-    vector<Filter*> filter = {new timeStampFilter()};
+    vector<Filter*> filter = {new TimeStampFilter()};
 
     int matchFilter(const string& name);
-    string filterData(const string& content);
+    string filterData(const string& content);/*
+    Config(){
+        Filter* c = new timeStampFilter();
+        filter.
+    }*/
 
 };
 

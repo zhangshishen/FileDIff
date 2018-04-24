@@ -19,7 +19,7 @@
 
 //check if the difference match key word
 
-int stringMatch(const std::string& src,const std::string& dest){
+int urlStringMatch(const std::string& src,const std::string& dest){
     int i = 0;
     
     while(i<src.size()){
@@ -40,7 +40,7 @@ int stringMatch(const std::string& src,const std::string& dest){
 
 int isURL(const std::string& s)
 {
-    if(stringMatch("http",s)||stringMatch("com",s)||stringMatch("www",s))
+    if(urlStringMatch("http",s)||urlStringMatch("com",s)||urlStringMatch("www",s))
         return 1;
     else return 0;
 }

@@ -7,11 +7,11 @@ const string dockerDiffdirCommand = "docker inspect --format='{{.GraphDriver.Dat
 
 
 string getContainerId(){
-    return exec(dockerIdCommand.c_str());
+    return Exec(dockerIdCommand.c_str());
 }
 
 string getContainerPath(const string containerID){
-    return exec((dockerDiffdirCommand+containerID).c_str());
+    return Exec((dockerDiffdirCommand+containerID).c_str());
 }
 
 vector<string> recentOpenedContainer(int number = 2){

@@ -3,7 +3,7 @@
 
 
 
-std::string exec(const char* cmd) {
+std::string Exec(const char* cmd) {
     std::array<char, 256> buffer;
     std::string result;
     std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
@@ -26,7 +26,7 @@ bool stringMatch(const string& src,const string& dst = "(?i:cache)"){
 
 
 string fileFormat(const string& name){
-    return exec((string("file ")+name).c_str());
+    return Exec((string("file ")+name).c_str());
 }
 
 bool isDirectory(const string& name){
@@ -49,7 +49,7 @@ void stringToFile(const string& fileName,const string& content){
 
 string makeTempFolder(const string& name){
     string out = name+"-tmp";
-    exec((string("mkdir ")+out).c_str());
+    Exec((string("mkdir ")+out).c_str());
     return out;
 }
 

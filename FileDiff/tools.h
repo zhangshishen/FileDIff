@@ -9,7 +9,7 @@
 #include <array>
 #include <regex>
 
-
+#pragma once
 using namespace std;
 
 class Filter{
@@ -24,7 +24,7 @@ void stringToFile(const string& fileName,const string& content);
 vector<string> separateString(const string& str,char separator);
 string fileToString(const string& fileName);
 bool isSeparator(char c);
-std::string exec(const char* cmd);
+std::string Exec(const char* cmd);
 bool isDirectory(const string& name);
 
 string wordScanner(const string& in,const Filter& filter);

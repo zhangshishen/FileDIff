@@ -1,4 +1,4 @@
-#include <timestampfilter.h>
+#include "timestampfilter.h"
 
 
 using namespace std;
@@ -95,7 +95,7 @@ string timeStampFilter(const string& s,int targetTimeStamp){
 }
 
 string mainTimeStampFilter(const string& in){
-    char* s = getenv("TIMESTAMP");
+    const char* s = getenv("TIMESTAMP");
 
     if(s==NULL){
         perror("timestamp not set,use default timestamp");
@@ -111,13 +111,13 @@ string mainTimeStampFilter(const string& in){
     }
 
 }
-string timeStampFilter::filter(const string& in) const{
+string TimeStampFilter::filter(const string& in) const{
     return mainTimeStampFilter(in);
 }
-bool timeStampFilter::SeparatorSelector(char c) const{
+bool TimeStampFilter::SeparatorSelector(char c) const{
     return isSeparator(c);
 }
-bool timeStampFilter::isTargetFile(const string& fileName) const{
+bool TimeStampFilter::isTargetFile(const string& fileName) const{
     return true;
     //string sFormat = getFormat(fileName.c_str());
     //if(sFormat)

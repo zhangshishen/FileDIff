@@ -28,6 +28,8 @@
 #define FLAT 0x00
 #define SIMPLE 0x01
 
+#pragma once
+
 struct Diff;
 template<class T> void initSeparator(std::initializer_list<T>& t);
 char* getName(char* word);
