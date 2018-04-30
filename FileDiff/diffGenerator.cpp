@@ -6,7 +6,7 @@
 //  Copyright © 2017年 Shishen Zhang. All rights reserved.
 //
 
-#include "diffGenerator.hpp"
+#include "diffGenerator.h"
 
 
 

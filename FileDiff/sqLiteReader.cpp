@@ -1,7 +1,31 @@
-#include "sqLiteReader.hpp"
+#include "sqLiteReader.h"
 
 std::vector<std::string> sqltablesName;
 FILE* outfile;
+
+string sqlReader (const char* database){
+    sqlite3* db;
+    string res;
+
+    int rc = sqlInit(&db, database);
+    if( rc ){
+    // failed
+        fprintf(stderr, "ERROR: Can't open database: %s\n", sqlite3_errmsg(db));
+    }
+
+    getTableName(db,rc);
+
+    for(int i = 0;i< sqltablesName.size();i++){
+        std::string tmp = "select * from " + sqltablesName[i]+" ;";
+        execCommand(db,rc,tmp.c_str(),&res);
+    }
+
+    sqltablesName.clear();
+    sqlite3_close(db);
+
+    return res;
+}
+
 
 std::vector<sqlQuery> sqlReader(const char* database,const char* output){
     outfile = fopen(output,"w+");
@@ -27,8 +51,54 @@ std::vector<sqlQuery> sqlReader(const char* database,const char* output){
     sqlite3_close(db);
     fclose(outfile);
     return ret;
+
 }
 
+static int callback0(void *ret, int argc, char **argv, char **azColName){
+    
+    if(argc==0) return 0;
+
+    string* out = (string*) ret;
+
+    for(int i=0; i<argc; i++)
+    {
+
+        const string id("id");
+        if(id==azColName[i]){
+            continue;
+        }
+        (*out)+=azColName[i];
+        (*out)+=" = ";
+        (*out)+=argv[i] ? argv[i] : "NULL";
+        (*out)+="  ";
+
+    }
+    (*out)+="\n\n";
+
+    return 0;
+}
+
+int execCommand(sqlite3* db,int rc, const char *query,string* out){  //argv[1] database argv[2]
+    
+    //sqlite3 *db;
+    char *zErrMsg = 0;
+    //int rc;
+    
+    if( rc ){
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return(1);
+    }
+    rc = sqlite3_exec(db, query, callback0, (void*)out, &zErrMsg);
+    if( rc!=SQLITE_OK )
+    {
+        fprintf(stderr, "SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    
+    
+    return 0;
+}
 
 
 static int callback(void *ret, int argc, char **argv, char **azColName){
@@ -100,6 +170,18 @@ int readSqlCommand(sqlite3* db,int rc, const char *query,vector<sqlQuery>* ret){
     return 0;
 }
 
+void getSqldump(const string& name,const string& out){
+
+    //std::string midName = name+"-dump.txt";
+    auto diff1 = sqlReader(name.c_str(),out.c_str());
+
+    sort(diff1.begin(),diff1.end());
+    //string midName=out+"-temp";
+    for(auto& c:diff1){
+        c.toFile(out);
+    }
+
+}
 
 string getDiffOfSqlite(char** word,string& name){
 

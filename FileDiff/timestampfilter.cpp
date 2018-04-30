@@ -22,26 +22,29 @@ bool isTimeStamp(const string& s){          //the current time format, 0 is not 
 }
 
 bool inline overflowInt(const string& s){    //if a string can be 
+
     if(s>to_string(INT64_MAX)){
         return true;
     }
+
     return false;
+    
 }
 
 bool isStandardTimestamp(const string& standard,const string& src){
     int lengthDiff = standard.size()-src.size();
-    return lengthDiff == 0 || lengthDiff == 3 || lengthDiff == 6 || lengthDiff == 9;
+    return lengthDiff == 0 || lengthDiff == -3 || lengthDiff == -6 || lengthDiff == 9;
 }
 
 void formatAdaptor(string target,string& src){        //timestamp is only prefix, just fill in zero or remove zero
 
     if(!isTimeStamp(target)||!isTimeStamp(src)){
-        perror("string is not timeStamp\n");
+        //perror("string is not timeStamp\n");
         return;
     }
 
     while(src.size()>target.size()){
-        perror("target size less than src");
+        //perror("target size less than src");
         src.pop_back();
     }
 
@@ -53,7 +56,7 @@ void formatAdaptor(string target,string& src){        //timestamp is only prefix
 
 bool isClientTimestamp(const string& s,const string& targetTimeStamp){
     if(targetTimeStamp ==""){
-        perror("standard timestamp not been set\n");
+        //perror("standard timestamp not been set\n");
         return false;
     }
     return targetTimeStamp != timeStampFilter(s,targetTimeStamp);
@@ -61,11 +64,11 @@ bool isClientTimestamp(const string& s,const string& targetTimeStamp){
 
 string timeStampFilter(const string& s,const string& targetTimeStamp){
     if(targetTimeStamp ==""){
-        perror("standard timestamp not been set\n");
+        //perror("standard timestamp not been set\n");
         return s;
     }
     if(!isTimeStamp(s)){
-        perror("string is not timeStamp\n");
+        //perror("string is not timeStamp\n");
         return s;
     }
     if(overflowInt(s)){
@@ -98,7 +101,7 @@ string mainTimeStampFilter(const string& in){
     const char* s = getenv("TIMESTAMP");
 
     if(s==NULL){
-        perror("timestamp not set,use default timestamp");
+        //perror("timestamp not set,use default timestamp");
         s=DEFAULTTIMESTAMP;
     }
     string out = timeStampFilter(in,s);
@@ -111,6 +114,11 @@ string mainTimeStampFilter(const string& in){
     }
 
 }
+
+string TimeStampFilter::excute(const string& inFileContent,const string& inFilePath) const{
+    return wordScanner(inFileContent,*this);
+}
+
 string TimeStampFilter::filter(const string& in) const{
     return mainTimeStampFilter(in);
 }
@@ -119,6 +127,11 @@ bool TimeStampFilter::SeparatorSelector(char c) const{
 }
 bool TimeStampFilter::isTargetFile(const string& fileName) const{
     return true;
-    //string sFormat = getFormat(fileName.c_str());
-    //if(sFormat)
+}
+
+bool TimeStampFilter::matchFormat(const string& format) const{
+    if(format==".sqlite"){
+        return true;
+    }
+    return false;
 }

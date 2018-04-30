@@ -14,9 +14,11 @@ using namespace std;
 
 class Filter{
 public:
+    virtual string excute(const string& inFileContent,const string& inFilePath) const = 0;
     virtual string filter(const string&) const=0;
     virtual bool SeparatorSelector(char c) const=0;
     virtual bool isTargetFile(const string&) const=0;
+    virtual bool matchFormat(const string&) const=0;
 };
 
 

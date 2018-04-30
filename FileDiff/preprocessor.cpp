@@ -63,37 +63,77 @@ int Config::matchFilter(const string& name){
         
 }
 
-
+string getName(const string& folderPath){
+    string out;
+    for(int i = folderPath.size()-1;i>=0;i--){
+        if(folderPath[i]=='/'){
+            break;
+        }else out.push_back(folderPath[i]);
+    }
+    reverse(out.begin(),out.end());
+    return out;
+}
 
 string preProcessor(const string& folderPath,const string& outPath,Config& config){
 
-    string res = makeTempFolder(config.name+to_string(config.mutableFlag));
+    string folderName = getName(folderPath);
 
+    string res = outPath;
+    /*
     if(config.mutableFlag==0){
         config.mutableFlag = 1;
     }
-    
-
-    auto fileList = separateString(exec((string("ls ")+folderPath).c_str()),'\n');
+    */
+    //list all the file in folder
+    auto fileList = separateString(exec((string("ls -1a ")+folderPath).c_str()),'\n');
 
     for(string& fileName:fileList){
-        
+        //cout<<"open file "<<fileName<<endl;
+        /*
         if(config.matchFilter(fileName)){
             continue;
         }
+*/
+/*
 
-        if(isDirectory(fileName)){
+        const char* format = getFormat(fileName.c_str());
+        if(format!=NULL&&strcmp(".sqlite",format)==0){
+            //sqlitefile
+            getSqldump(folderPath+'/'+fileName,fileName+"-dump");
+            //fileName = fileName+"-dump";
+        }
+*/
 
+
+        if(isDirectory(folderPath+'/'+fileName)){
+
+            if(fileName=="."||fileName==".."){
+                continue;
+            }
+
+            string res = makeTempFolder(outPath+'/'+fileName);
             preProcessor(string(folderPath+'/'+fileName),string(outPath+'/'+fileName+config.fileSuffix),config);
 
         }else{
-            
-            auto inContent = fileToString(fileName);
+
+            //TODO
+
+            auto inContent = fileToString(folderPath+'/'+fileName);
+
+                //inContent = fileToString(fileName+"-dump");
+
             for(auto pFilter:config.filter){
-                inContent = wordScanner(inContent,*pFilter);
+                string mid;
+                const char* format = getFormat(fileName.c_str());
+                if(format==NULL){
+                    mid ="";
+                }else mid = format;
+                if(pFilter->matchFormat(mid)){
+                    inContent = pFilter->excute(inContent,folderPath+'/'+fileName);
+                }
             }
 
-            stringToFile(inContent,outPath+fileName+config.fileSuffix);
+            stringToFile(inContent,outPath+'/'+fileName+config.fileSuffix);
             //preProcess(fileName,string(outPath+config.fileSuffix),timeStampFilter());
             //auto stringOfFile = fileToString(fileName);
             
@@ -104,6 +144,7 @@ string preProcessor(const string& folderPath,const string& outPath,Config& confi
 }
 
 vector<string> twinsPreProcessor(){
+
     vector<string> res;
     vector<string> idList = recentOpenedContainer(2);
 
@@ -111,17 +152,31 @@ vector<string> twinsPreProcessor(){
         printf("folder size not equal to 2\n");
         return res;
     }
-    
+
+    TimeStampFilter tf;
+    Sqlitefilter sf;
+
     Config config;
-    config.nameFilter.push_back("(?i:cache)");
+
+    config.filter.push_back(&sf);
+    config.filter.push_back(&tf);
+
+
+    config.nameFilter.push_back("([\\s\\S]*).cache([\\s\\S]*)");
+
+
     config.name = "pre";
 
     
     
     string path = getContainerPath(idList[0]);
-    res.push_back(preProcessor(path,"",config));
+    string outPath1 = makeTempFolder("./diff1"),outPath2 = makeTempFolder("./diff2");
+
+    res.push_back(preProcessor(path+"/root/.mozilla/firefox",outPath1,config));
+    //config.mutableFlag = 1;
     path = getContainerPath(idList[1]);
-    res.push_back(preProcessor(path,"",config));
+    res.push_back(preProcessor(path+"/root/.mozilla/firefox",outPath2,config));
 
     return res;
+
 }

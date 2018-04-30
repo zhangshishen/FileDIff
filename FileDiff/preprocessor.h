@@ -2,7 +2,10 @@
 #include "diff.h"
 #include "tools.h"
 #include "timestampfilter.h"
+#include "sqlitefilter.h"
 #include "container.h"
+#include "algorithm"
+#include "sqLiteReader.h"
 using namespace std;
 
 
@@ -11,9 +14,8 @@ class Config{
 public:
     string fileSuffix;
     string name = "pre";
-    int mutableFlag = 0;
     vector<string> nameFilter;
-    vector<Filter*> filter = {new TimeStampFilter()};
+    vector<Filter*> filter;
 
     int matchFilter(const string& name);
     string filterData(const string& content);/*
@@ -21,7 +23,6 @@ public:
         Filter* c = new timeStampFilter();
         filter.
     }*/
-
 };
 
 int preProcess(const string& fileName,const string& outName,const Filter& fil);

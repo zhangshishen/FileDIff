@@ -12,6 +12,9 @@ std::string Exec(const char* cmd) {
         if (fgets(buffer.data(), 256, pipe.get()) != nullptr)
             result += buffer.data();
     }
+    if(result[result.size()-1]=='\n'){
+        result.pop_back();
+    }
     return result;
 }
 
@@ -35,20 +38,20 @@ bool isDirectory(const string& name){
     if(words.size()<2){
         perror("file format test failed\n");
     }
-    if(words[1]==" directory"){
+    if(words[1]==" directory"||words[1]==" sticky"){
         return true;
     }else return false;
 }
 
 
-void stringToFile(const string& fileName,const string& content){
+void stringToFile(const string& content,const string& fileName){
     std::ofstream out(fileName);
     out<<content;
     out.close();
 }
 
 string makeTempFolder(const string& name){
-    string out = name+"-tmp";
+    string out = name;
     Exec((string("mkdir ")+out).c_str());
     return out;
 }
@@ -99,10 +102,15 @@ string fileToString(const string& fileName){
         perror("file open failed\n");
         return res;
     }
-    
+
+    string tmp;
+
     while(!file.eof()){
-        getline(file,res);
+        getline(file,tmp);
+        tmp+="\n";
+        res+=tmp;
     }
+    
     return res;
 
 }
@@ -110,13 +118,19 @@ string fileToString(const string& fileName){
 
 
 string wordScanner(const string& inFile,const Filter& filter){
+
     string out,tmp;
 
     for(auto c:inFile){
 
         if(filter.SeparatorSelector(c)){
-            out+=filter.filter(tmp);
-            tmp.clear();
+            
+            if(tmp!=""){
+                out+=filter.filter(tmp);
+                tmp.clear();
+            }
+            out+=c;
+            
         }
         else{
             tmp+=c;

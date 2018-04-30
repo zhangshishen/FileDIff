@@ -2,8 +2,8 @@
 
 using namespace std;
 
-const string dockerIdCommand = "docker ps -n 2 -q";
-const string dockerDiffdirCommand = "docker inspect --format='{{.GraphDriver.Data.UpperDir}}'" ;
+const string dockerIdCommand = "docker ps -n 2 -q ";
+const string dockerDiffdirCommand = "docker inspect --format='{{.GraphDriver.Data.UpperDir}}' " ;
 
 
 string getContainerId(){

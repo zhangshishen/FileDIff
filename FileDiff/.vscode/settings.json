@@ -32,6 +32,7 @@
         "container.h": "c",
         "string": "c",
         "memory": "cpp",
-        "bitset": "cpp"
+        "bitset": "cpp",
+        "sstream": "cpp"
     }
 }

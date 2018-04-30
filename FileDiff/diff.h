@@ -19,8 +19,8 @@
 #include "parser.h"
 #include "keyExtract.h"
 #include "fstream"
-#include "sqLiteReader.hpp"
-#include "diffGenerator.hpp"
+#include "sqLiteReader.h"
+#include "diffGenerator.h"
 #include "sqlDiff.h"
 
 #include "tools.h"
