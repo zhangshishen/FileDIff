@@ -70,10 +70,10 @@ static int callback0(void *ret, int argc, char **argv, char **azColName){
         (*out)+=azColName[i];
         (*out)+=" = ";
         (*out)+=argv[i] ? argv[i] : "NULL";
-        (*out)+="  ";
+        (*out)+='\n';
 
     }
-    (*out)+="\n\n";
+    //(*out)+="\n\n";
 
     return 0;
 }

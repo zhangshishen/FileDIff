@@ -32,6 +32,18 @@ string fileFormat(const string& name){
     return Exec((string("file ")+name).c_str());
 }
 
+bool isLongLine(const string& name){
+    auto res = fileFormat(name);
+    auto words = separateString(res,' ');
+    if(words.size()!=7){
+        return false;
+    }
+    if(words[5]=="long"||words[6]=="lines"){
+        return true;
+    }
+    return false;
+}
+
 bool isDirectory(const string& name){
     auto res = fileFormat(name);
     auto words = separateString(res,':');
@@ -110,7 +122,7 @@ string fileToString(const string& fileName){
         tmp+="\n";
         res+=tmp;
     }
-    
+
     return res;
 
 }

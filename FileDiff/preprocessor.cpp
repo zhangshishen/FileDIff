@@ -128,6 +128,10 @@ string preProcessor(const string& folderPath,const string& outPath,Config& confi
                 if(format==NULL){
                     mid ="";
                 }else mid = format;
+
+                if(!pFilter->isTargetFile(folderPath+'/'+fileName)){
+                    continue;
+                }
                 if(pFilter->matchFormat(mid)){
                     inContent = pFilter->excute(inContent,folderPath+'/'+fileName);
                 }
