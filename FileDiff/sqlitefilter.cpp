@@ -12,13 +12,14 @@ bool Sqlitefilter::SeparatorSelector(char c) const{
 
 }
 
-bool Sqlitefilter::isTargetFile(const string& format) const{
-    return true;
-}
-
-bool Sqlitefilter::matchFormat(const string& format) const{
-    if(format==".sqlite"){
+bool Sqlitefilter::isTargetFile(const string& fullpath) const{
+    if(isSqlite(fullpath)){
         return true;
     }
     return false;
+}
+
+bool Sqlitefilter::matchFormat(const string& format) const{
+    return true;
+
 }

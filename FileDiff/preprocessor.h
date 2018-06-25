@@ -3,6 +3,7 @@
 #include "tools.h"
 #include "timestampfilter.h"
 #include "sqlitefilter.h"
+#include "linefilter.h"
 #include "container.h"
 #include "algorithm"
 #include "sqLiteReader.h"
@@ -26,7 +27,7 @@ public:
 };
 
 int preProcess(const string& fileName,const string& outName,const Filter& fil);
-bool stringMatch(const string& src,const string& dst = "(?i:cache)");
+bool stringMatch(const string& src,const string& dst);
 string preProcessor(const string& folderPath,const string& outPath,Config& config);
 vector<string> twinsPreProcessor();
 

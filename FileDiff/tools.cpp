@@ -18,9 +18,9 @@ std::string Exec(const char* cmd) {
     return result;
 }
 
-bool stringMatch(const string& src,const string& dst = "(?i:cache)"){
+bool stringMatch(const string& src,const string& dst = "([\\s\\S]*)cache([\\s\\S]*)"){
     
-    if(src.size()<dst.size()) return false;
+    //if(src.size()<dst.size()) return false;
 
     return regex_match(src,regex(dst));
 
@@ -29,32 +29,62 @@ bool stringMatch(const string& src,const string& dst = "(?i:cache)"){
 
 
 string fileFormat(const string& name){
-    return Exec((string("file ")+name).c_str());
+    return Exec((string("file ")+changeSpace(name)).c_str());
 }
 
-bool isLongLine(const string& name){
+bool isSqlite(const string& name){
     auto res = fileFormat(name);
     auto words = separateString(res,' ');
-    if(words.size()!=7){
-        return false;
+    
+    if(words[1]=="SQLite"){
+        return true;
     }
-    if(words[5]=="long"||words[6]=="lines"){
+    return false;
+}
+bool isLongLine(const string& name){
+
+    auto res = fileFormat(name);
+    auto words = separateString(res,',');
+    if(words.size()<2) return false; 
+    string s = words[1];
+    auto word = separateString(s,' ');
+    if(word.size()<4) return false;
+    if(word[2]=="long"||word[3]=="lines"){
         return true;
     }
     return false;
 }
 
+
+
 bool isDirectory(const string& name){
-    auto res = fileFormat(name);
-    auto words = separateString(res,':');
-    if(words.size()<2){
-        perror("file format test failed\n");
-    }
-    if(words[1]==" directory"||words[1]==" sticky"){
-        return true;
-    }else return false;
+
+    struct stat path_stat;
+    stat(name.c_str(), &path_stat);
+    return S_ISDIR(path_stat.st_mode);
+
 }
 
+string removeSpace(const string& name){
+    string res;
+    for(auto c:name){
+        if(c=='\\'){
+            continue;
+        }
+        res+=c;
+    }
+    return res;
+}
+string changeSpace(const string& name){
+    string res;
+    for(auto c:name){
+        if(c==' '){
+            res+='\\';
+        }
+        res+=c;
+    }
+    return res;
+}
 
 void stringToFile(const string& content,const string& fileName){
     std::ofstream out(fileName);
@@ -64,6 +94,7 @@ void stringToFile(const string& content,const string& fileName){
 
 string makeTempFolder(const string& name){
     string out = name;
+    out = changeSpace(name);
     Exec((string("mkdir ")+out).c_str());
     return out;
 }
@@ -107,6 +138,18 @@ bool isSeparator(char c){
 
 string fileToString(const string& fileName){
 
+
+    
+    std::ifstream t(removeSpace(fileName));
+
+    if(!t.is_open()){
+        perror("file open failed\n");
+        return "";
+    }
+
+    std::string res((std::istreambuf_iterator<char>(t)),
+                 std::istreambuf_iterator<char>());
+                 /*
     string res;
     ifstream file(fileName);
 
@@ -122,7 +165,7 @@ string fileToString(const string& fileName){
         tmp+="\n";
         res+=tmp;
     }
-
+*/
     return res;
 
 }

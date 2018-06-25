@@ -1,5 +1,5 @@
 #include "tools.h"
-#include "sqLiteReader.h"
+
 #include <vector>
 
 using namespace std;

@@ -85,15 +85,13 @@ string preProcessor(const string& folderPath,const string& outPath,Config& confi
     }
     */
     //list all the file in folder
-    auto fileList = separateString(exec((string("ls -1a ")+folderPath).c_str()),'\n');
+    auto fileList = separateString(exec((string("ls -1a ")+changeSpace(folderPath)).c_str()),'\n');
 
     for(string& fileName:fileList){
         //cout<<"open file "<<fileName<<endl;
-        /*
-        if(config.matchFilter(fileName)){
-            continue;
-        }
-*/
+        
+        
+
 /*
 
         const char* format = getFormat(fileName.c_str());
@@ -102,20 +100,22 @@ string preProcessor(const string& folderPath,const string& outPath,Config& confi
             getSqldump(folderPath+'/'+fileName,fileName+"-dump");
             //fileName = fileName+"-dump";
         }
-*/
+*/      
 
 
         if(isDirectory(folderPath+'/'+fileName)){
-
             if(fileName=="."||fileName==".."){
                 continue;
             }
-
+            if(config.matchFilter(fileName)){
+                continue;
+            }
+            //fileName = changeSpace(fileName);
             string res = makeTempFolder(outPath+'/'+fileName);
             preProcessor(string(folderPath+'/'+fileName),string(outPath+'/'+fileName+config.fileSuffix),config);
 
         }else{
-
+            //fileName = changeSpace(fileName);
             //TODO
 
             auto inContent = fileToString(folderPath+'/'+fileName);
@@ -159,14 +159,16 @@ vector<string> twinsPreProcessor(){
 
     TimeStampFilter tf;
     Sqlitefilter sf;
+    Linefilter lf;
 
     Config config;
 
     config.filter.push_back(&sf);
+    config.filter.push_back(&lf);
     config.filter.push_back(&tf);
+    
 
-
-    config.nameFilter.push_back("([\\s\\S]*).cache([\\s\\S]*)");
+    config.nameFilter.push_back("([\\s\\S]*)cache([\\s\\S]*)");
 
 
     config.name = "pre";
@@ -176,10 +178,10 @@ vector<string> twinsPreProcessor(){
     string path = getContainerPath(idList[0]);
     string outPath1 = makeTempFolder("./diff1"),outPath2 = makeTempFolder("./diff2");
 
-    res.push_back(preProcessor(path+"/root/.mozilla/firefox",outPath1,config));
+    res.push_back(preProcessor(path+"",outPath1,config));
     //config.mutableFlag = 1;
     path = getContainerPath(idList[1]);
-    res.push_back(preProcessor(path+"/root/.mozilla/firefox",outPath2,config));
+    res.push_back(preProcessor(path+"",outPath2,config));
 
     return res;
 

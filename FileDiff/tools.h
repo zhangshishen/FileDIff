@@ -5,6 +5,8 @@
 #include <iostream>
 #include <memory>
 #include <stdexcept>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <string>
 #include <array>
 #include <regex>
@@ -32,5 +34,6 @@ bool isDirectory(const string& name);
 string wordScanner(const string& in,const Filter& filter);
 bool stringMatch(const string& src,const string& dst);
 string makeTempFolder(const string& name);
-
+string changeSpace(const string& name);
 bool isLongLine(const string& name);
+bool isSqlite(const string& name);

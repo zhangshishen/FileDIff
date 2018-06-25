@@ -2,3 +2,8 @@
 *.out
 log-old
 dltest
+*.o
+diff1
+diff2
+Service
+chrome-log

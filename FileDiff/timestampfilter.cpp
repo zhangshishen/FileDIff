@@ -4,9 +4,11 @@
 using namespace std;
 
 #define TIMESHAKE 100
-#define DEFAULTTIMESTAMP "1500000000000000"
+#define STRICTTIMESHAKE 100000000
 
 
+#define SEC_TO_UNIX_EPOCH 11644473600000000L
+#define WINEPOCH "11644473600000000"
 
 bool isTimeStamp(const string& s){          //the current time format, 0 is not good
 
@@ -14,7 +16,7 @@ bool isTimeStamp(const string& s){          //the current time format, 0 is not 
         return false;
     }
 
-    if(s.size()>16){
+    if(s.size()>17||s.size()<9){
         return false;
     }
     
@@ -33,7 +35,7 @@ bool inline overflowInt(const string& s){    //if a string can be
 
 bool isStandardTimestamp(const string& standard,const string& src){
     int lengthDiff = standard.size()-src.size();
-    return lengthDiff == 0 || lengthDiff == -3 || lengthDiff == -6 || lengthDiff == 9;
+    return lengthDiff == 0 || lengthDiff == -3 || lengthDiff == -6 || lengthDiff == -7;
 }
 
 void formatAdaptor(string target,string& src){        //timestamp is only prefix, just fill in zero or remove zero
@@ -62,6 +64,21 @@ bool isClientTimestamp(const string& s,const string& targetTimeStamp){
     return targetTimeStamp != timeStampFilter(s,targetTimeStamp);
 }
 
+long int isWinEpoch(const string& targetTimeStamp,const string& time){   //check if is windows timestamp and return the appropriate unix timestamp
+    string tmp = time;
+    formatAdaptor(targetTimeStamp,tmp);
+    long int target = stol(targetTimeStamp);
+    long int src = stol(tmp);
+
+    if(src>target){
+        src-=target;
+    }else{
+        return -1;
+    }
+    return src;
+}
+
+
 string timeStampFilter(const string& s,const string& targetTimeStamp){
     if(targetTimeStamp ==""){
         //perror("standard timestamp not been set\n");
@@ -74,17 +91,28 @@ string timeStampFilter(const string& s,const string& targetTimeStamp){
     if(overflowInt(s)){
         return s;
     }
-    if(!isStandardTimestamp(targetTimeStamp,s)){
+
+    long int target = stol(targetTimeStamp);
+    long int src = stol(s);
+
+    long int uEpoch = isWinEpoch(WINEPOCH,s);
+    uEpoch/=1000000;
+    if(uEpoch>=0&&(abs(uEpoch-stol(targetTimeStamp))<STRICTTIMESHAKE)){
+        src = uEpoch;
+    }
+
+    string mid = to_string(src);
+
+
+    if(!isStandardTimestamp(targetTimeStamp,mid)){
         return s;
     }
     
-    string out = s;
-    formatAdaptor(targetTimeStamp,out);
+    formatAdaptor(targetTimeStamp,mid);
 
-    long int target = stol(targetTimeStamp);
-    long int src = stol(out);
+    src = stol(mid);
 
-    if(abs(target-src) < TIMESHAKE ){
+    if(abs(target-src) < STRICTTIMESHAKE ){
         return targetTimeStamp;
     }else{
         return s;
@@ -98,12 +126,20 @@ string timeStampFilter(const string& s,int targetTimeStamp){
 }
 
 string mainTimeStampFilter(const string& in){
-    const char* s = getenv("TIMESTAMP");
-
-    if(s==NULL){
-        //perror("timestamp not set,use default timestamp");
-        s=DEFAULTTIMESTAMP;
+    static string s;
+    if(s=="") {
+        auto m = getenv("TIMESTAMP");
+        if(m!=NULL) s = m;
+        
     }
+
+    if(s==""){
+        //perror("timestamp not set,use default timestamp");
+        auto m = exec("date +%s");
+        if(m[m.size()-1]=='\n') m.pop_back();
+        s = m;
+    }
+
     string out = timeStampFilter(in,s);
     
     if(out==in){
@@ -123,15 +159,22 @@ string TimeStampFilter::filter(const string& in) const{
     return mainTimeStampFilter(in);
 }
 bool TimeStampFilter::SeparatorSelector(char c) const{
-    return isSeparator(c);
+    return c<'0'||c>'9';
 }
 bool TimeStampFilter::isTargetFile(const string& fileName) const{
-    return true;
+
+    string s = "file ";
+    s+=changeSpace(fileName);
+
+    if(stringMatch(exec(s.c_str()),"([\\s\\S]*)text([\\s\\S]*)")||stringMatch(exec(s.c_str()),"([\\s\\S]*)SQLite([\\s\\S]*)"))
+        return true;
+    
+    return false;
 }
 
 bool TimeStampFilter::matchFormat(const string& format) const{
-    if(format==".sqlite"){
+    //if(format==".sqlite"){
         return true;
-    }
-    return false;
+    //}
+    //return false;
 }
